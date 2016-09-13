@@ -21,10 +21,12 @@ import javafx.scene.control.*;
  */
 public class MonMotus extends Application  {
 
+    IFacadeMotus maFacade;
     String[] tab, tabJoueur;
     Stage window;
     Scene scene1, scene2, sceneJeu;
-
+    String joueurActuel;
+    String mot;
 
     public static void main(String[]args){
         //init
@@ -32,25 +34,27 @@ public class MonMotus extends Application  {
         launch(args);
     }
     private boolean LancerPartie(String j1, String j2, String difficulte) {
-        IFacadeMotus maFacade = new FacadeMotus();
+        maFacade = new FacadeMotus();
         tab = new String[7];
-        if(maFacade.creationPartie(j1,j2)){
+        if(maFacade.creationPartie(j1,j2)) {
             System.out.println("Partie créée oklm!");
             System.out.println();
 
-            tabJoueur = tabJoueur(j1,j2);
-            String joueurActuel;
+            //tab
+            tab = new String[7];
+            for (int i = 0; i < 7; i++)
+                tab[i] = "";
 
-
+            //tabJoueur
+            tabJoueur = tabJoueur(j1, j2);
+            joueurActuel = tabJoueur[0];
+            NouvellePartie(joueurActuel, tab, difficulte);
+/*
             for(int i=0;i<7;i++){
-                joueurActuel=tabJoueur[i];
-                if (i!=6)
-                    System.out.println("Tour n°"+(i+1)+": "+joueurActuel+", tu peux proposer un mot fdp");
-                else
-                    System.out.println("Tour n°"+(i+1)+": "+joueurActuel+", tu peux proposer un mot fdp /!\\DERNIERE CHANCE/!\\");
 
-                String motSaisi = sc.nextLine();
-                String Resultat = maFacade.jouer(joueurActuel,motSaisi);
+                System.out.println(mot);
+                String Resultat = maFacade.jouer(joueurActuel, mot);
+
                 if (!(Resultat.equals("XXXXXXX"))){
                     System.out.println(Resultat);
                 }
@@ -78,12 +82,18 @@ public class MonMotus extends Application  {
             System.out.println();
             System.out.println();
             System.out.println();
+            Scanner sc = new Scanner(System.in);
             String reponse = sc.nextLine();
             return (reponse.charAt(0)=='o');
         }else{
             System.out.println("ERREUR");
             return false;
+        }*/
         }
+        return true;
+    }
+    public void LancerPartieBis(String mot){
+        System.out.println(mot);
     }
     private static int alea(int maxValue){
         Random randGen = new Random();
@@ -240,7 +250,7 @@ public void start(Stage primaryStage) throws Exception {
     window.setScene(scene);
     window.show();
 }
-public String NouvellePartie(String user, String[] tab, String difficulte){
+public void NouvellePartie(String user, String[] tab, String difficulte){
     GridPane gridJeu = new GridPane();
     gridJeu.setAlignment(Pos.CENTER);
     gridJeu.setPadding(new Insets(10, 10, 10, 10));
@@ -286,10 +296,9 @@ public String NouvellePartie(String user, String[] tab, String difficulte){
 
 
     gridJeu.getChildren().addAll(vide, tourMessage, answer, validate);
-    validate.setOnAction(e -> {
-        String ans = tourMessage.getText();
-        return ans;
-            });
+    validate.setOnAction(e ->
+            LancerPartieBis(answer.getText())
+    );
 
     //GridPane.setConstraints(labelUser1, 0, 0);
     //GridPane.setConstraints(labelUser2, 0, 1);
@@ -300,7 +309,6 @@ public String NouvellePartie(String user, String[] tab, String difficulte){
     sceneJeu.getStylesheets().add("style.css");
 
     window.setScene(sceneJeu);
-
 }
 public boolean TraitementValidationMenu(String user1, String user2){
  if(!user1.equals("") && !user2.equals(""))
