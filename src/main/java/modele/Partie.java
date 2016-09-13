@@ -60,6 +60,7 @@ public class Partie {
                 }
             }
         }
+        this.tour++;
         return new String(resultat);
     }
 

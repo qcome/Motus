@@ -3,12 +3,14 @@ import java.util.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -19,6 +21,7 @@ import javafx.scene.control.*;
  */
 public class MonMotus extends Application  {
 
+    String[] tab, tabJoueur;
     Stage window;
     Scene scene1, scene2, sceneJeu;
 
@@ -27,33 +30,15 @@ public class MonMotus extends Application  {
         //init
        //Fenetre fenetre = new Fenetre();
         launch(args);
-        boolean nouvellePartie;
-        System.out.println("-------BONDOUR-------");
-        System.out.println();
-        System.out.println("Pseudo joueur 1:");
-        Scanner sc = new Scanner(System.in);
-        String j1 = sc.nextLine();
-        System.out.println("Pseudo joueur 2:");
-        String j2 = sc.nextLine();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-
-        do{
-            nouvellePartie=LancerPartie(j1, j2);
-        }while(nouvellePartie);
     }
-    private static boolean LancerPartie(String j1, String j2) {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("------RE-BONDOUR------");
-        System.out.println();
+    private boolean LancerPartie(String j1, String j2, String difficulte) {
         IFacadeMotus maFacade = new FacadeMotus();
-
+        tab = new String[7];
         if(maFacade.creationPartie(j1,j2)){
             System.out.println("Partie créée oklm!");
             System.out.println();
 
-            String[] tabJoueur = tabJoueur(j1,j2);
+            tabJoueur = tabJoueur(j1,j2);
             String joueurActuel;
 
 
@@ -231,8 +216,7 @@ public void start(Stage primaryStage) throws Exception {
     GridPane.setConstraints(choiceBox, 1, 3);
 
     //vue 2
-    StackPane layoutJeu = new StackPane();
-    sceneJeu = new Scene(layoutJeu, 500, 350);
+
 
     //Button valider
     Button loginButton = new Button("Log In");
@@ -241,9 +225,9 @@ public void start(Stage primaryStage) throws Exception {
         if (!TraitementValidationMenu(user1.getText(), user2.getText())){
             AlertBox.display("Erreur", "Le choix de pseudos est nécessaire pour démarrer la partie");
         }else{
-            window.setScene(sceneJeu);
-            NouvellePartie(user1.getText(), user2.getText(), choiceBox.getValue());
+            LancerPartie(user1.getText(), user2.getText(), choiceBox.getValue());
             System.out.println(choiceBox.getValue());
+           // window.show();
         }
     });
 
@@ -254,14 +238,71 @@ public void start(Stage primaryStage) throws Exception {
     Scene scene = new Scene(grid, 500, 350);
     scene.getStylesheets().add("style.css");
     window.setScene(scene);
-
     window.show();
 }
-public void NouvellePartie(String user1, String user2, String difficulte){
+public String NouvellePartie(String user, String[] tab, String difficulte){
+    GridPane gridJeu = new GridPane();
+    gridJeu.setAlignment(Pos.CENTER);
+    gridJeu.setPadding(new Insets(10, 10, 10, 10));
+    gridJeu.setVgap(8);
+    gridJeu.setHgap(10);
+
+
+    //VBox layoutJeu = new VBox(10);
+    //Label labelUser1 = new Label(user1 + ", à toi de jouer:");
+    //Label labelUser2 = new Label(user2 + ", à toi de jouer:");
+    Label vide = new Label("");
+    //zdazdazdazd
+    //boolean nouvellePartie;
+    //do{
+     //   nouvellePartie=LancerPartie(user1, user2);
+    //}while(nouvellePartie);
+
+    //tableau jeu
+    Text title = new Text("Data");
+    for (int i = 1 ; i<8 ; i++){
+        for (int j = 0 ; j<7 ; j++){
+            if(!tab[i-1].equals("")){
+
+            }
+            Label l = new Label ("_");
+            GridPane.setConstraints(l, i, j);
+            gridJeu.getChildren().add(l);
+        }
+    }
+    TextField answer = new TextField();
+    answer.setPrefWidth(150);
+    GridPane.setConstraints(answer, 0, 9, 8, 1);
+
+    GridPane.setConstraints(vide, 0, 7, 8, 1);
+
+    Text tourMessage = new Text(user + ", à toi de jouer:");
+    tourMessage.setFont(Font.font("Tahoma", FontWeight.NORMAL, 13));
+    tourMessage.setFill(Color.BEIGE);
+    GridPane.setConstraints(tourMessage, 0, 8, 8, 1);
+
+    Button validate = new Button("Valider");
+    GridPane.setConstraints(validate, 0, 10, 8, 1);
+
+
+    gridJeu.getChildren().addAll(vide, tourMessage, answer, validate);
+    validate.setOnAction(e -> {
+        String ans = tourMessage.getText();
+        return ans;
+            });
+
+    //GridPane.setConstraints(labelUser1, 0, 0);
+    //GridPane.setConstraints(labelUser2, 0, 1);
+
+    //gridJeu.getChildren().addAll(labelUser1, labelUser2);
+
+    sceneJeu = new Scene(gridJeu, 500, 350);
+    sceneJeu.getStylesheets().add("style.css");
+
+    window.setScene(sceneJeu);
 
 }
 public boolean TraitementValidationMenu(String user1, String user2){
-
  if(!user1.equals("") && !user2.equals(""))
      return true;
  else
