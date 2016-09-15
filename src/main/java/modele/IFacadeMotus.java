@@ -4,7 +4,7 @@ package modele;
  * Created by o2122505 on 06/09/16.
  */
 public interface IFacadeMotus {
-    boolean creationPartie(String pseudo1, String pseudo2);
+    boolean creationPartie(String pseudo1, String pseudo2, String dictionnaire);
 
     boolean deconnexion(String pseudo);
 
@@ -13,5 +13,7 @@ public interface IFacadeMotus {
     Partie getPartie(String pseudo);
 
     String getMotRecherche(String pseudo);
+
+    int getTour(String pseudo);
 
 }

@@ -10,17 +10,22 @@ public class Partie {
     private String motRecherche;
     private String propostion;
     private int nbTours = 7;
+
+    public int getTour() {
+        return tour;
+    }
+
     private int tour = 1;
     private HashMap hm;
 
 
-    public Partie(String joueur1,String joueur2) {
+    public Partie(String joueur1,String joueur2, String dictionnaire) {
         this.joueur1=new Joueur(joueur1);
         this.joueur2=new Joueur(joueur2);
-
-        Random r = new Random();
-        int numDico=r.nextInt((2 - 1) + 1) + 1;
-        this.dico = new Dictionnaire(numDico);
+        if (dictionnaire.equals("87 mots"))
+            this.dico = new Dictionnaire(2);
+        else
+            this.dico = new Dictionnaire(1);
 
         Random rand = new Random();
         this.posMot=rand.nextInt((dico.getTaille() - 1) + 1) + 1;
